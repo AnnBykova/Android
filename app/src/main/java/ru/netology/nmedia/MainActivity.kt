@@ -4,43 +4,43 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.lifecycle.ViewModel
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.viewModel.PostViewModel
 
  class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private val viewModel by viewModels<PostViewModel> ()
+     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val post = Posts(
-            id = 0,
-            author = "Анна Быкова",
-            content = "Tекст поста",
-            published = "28 июня"
-        )
-        binding.render (post)
+         viewModel.data.observe(this) {post ->
+         binding.render(post)}
+
         binding.likes.setOnClickListener {
-            post.isLiked = !post.isLiked
-            if (post.isLiked) post.likes ++ else post.likes --
-            binding.likes.setImageResource(getLikeIconResId(post.isLiked))
-            binding.likesCount.text="${getCountToString(post.likes)}"
+            viewModel.onLikeClicked()
+            binding.likesCount.text=getCountToString(viewModel.data.value?.likes ?: 0)
         }
 
         binding.share.setOnClickListener {
-            post.share ++
-            binding.shareCount.text="${getCountToString(post.share)}"
+            viewModel.onShareClicked()
+            binding.shareCount.text=getCountToString(viewModel.data.value?.share ?: 0)
         }
+
+
     }
         private fun ActivityMainBinding.render (post: Posts){
             textViewAuthor.text = post.author
             textViewDate.text = post.published
             postText.text=post.content
             likes.setImageResource(getLikeIconResId(post.isLiked))
-            likesCount.text= "${getCountToString(post.likes)}"
-            shareCount.text ="${getCountToString(post.share)}"
-            showCount.text ="${getCountToString(post.show)}"
+            likesCount.text= getCountToString(post.likes)
+            shareCount.text =getCountToString(post.share)
+            showCount.text =getCountToString(post.show)
         }
 
      private fun getCountToString (count: Int): String {
