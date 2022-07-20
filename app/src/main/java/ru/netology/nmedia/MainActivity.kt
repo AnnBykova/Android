@@ -8,42 +8,51 @@ import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
+import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.databinding.PostListItemBinding
 import ru.netology.nmedia.viewModel.PostViewModel
 
  class MainActivity : AppCompatActivity() {
-    private val viewModel by viewModels<PostViewModel> ()
+     private val viewModel by viewModels<PostViewModel>()
      override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+         super.onCreate(savedInstanceState)
+         val binding = ActivityMainBinding.inflate(layoutInflater)
+         setContentView(binding.root)
 
-         viewModel.data.observe(this) {post ->
-         binding.render(post)}
+         val adapter = PostsAdapter(
+             onLikeClicked = {post ->
+                 viewModel.onLikeClicked(post)
+             },
+             onShareClicked = {post->
+                 viewModel.onShareClicked(post)
+             }
+         )
+         binding.postsRecyclerView.adapter=adapter
+         viewModel.data.observe(this) { posts ->
+             adapter.submitList(posts)
+             }
+         }
+         }
 
-        binding.likes.setOnClickListener {
-            viewModel.onLikeClicked()
-            binding.likesCount.text=getCountToString(viewModel.data.value?.likes ?: 0)
-        }
-
-        binding.share.setOnClickListener {
-            viewModel.onShareClicked()
-            binding.shareCount.text=getCountToString(viewModel.data.value?.share ?: 0)
-        }
 
 
-    }
-        private fun ActivityMainBinding.render (post: Posts){
-            textViewAuthor.text = post.author
-            textViewDate.text = post.published
-            postText.text=post.content
-            likes.setImageResource(getLikeIconResId(post.isLiked))
-            likesCount.text= getCountToString(post.likes)
-            shareCount.text =getCountToString(post.share)
-            showCount.text =getCountToString(post.show)
-        }
 
-     private fun getCountToString (count: Int): String {
+
+
+
+
+//        private fun ActivityMainBinding.render (post: Posts){
+//            textViewAuthor.text = post.author
+//            textViewDate.text = post.published
+//            postText.text=post.content
+//            likes.setImageResource(getLikeIconResId(post.isLiked))
+//            likesCount.text= getCountToString(post.likes)
+//            shareCount.text =getCountToString(post.share)
+//            showCount.text =getCountToString(post.show)
+//        }
+
+     fun getCountToString (count: Int): String {
          return when {
                   count in 1000..9_999 -> {
                       if (count % 1000 >= 100) {
@@ -69,4 +78,4 @@ import ru.netology.nmedia.viewModel.PostViewModel
      private fun getLikeIconResId(liked : Boolean) =
          if (liked) R.drawable.ic_baseline_favorite_red_24 else R.drawable.ic_baseline_favorite_24
 
-    }
+
