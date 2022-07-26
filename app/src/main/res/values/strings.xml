@@ -2,4 +2,8 @@
     <string name="app_name">NMEDIA</string>
     <string name="greeting">NMEDIA!</string>
     <string name="avatarDescription">Author avatar</string>
+    <string name="remove">Remove</string>
+    <string name="post_text">Post text</string>
+    <string name="description_post_save">Post save</string>
+    <string name="menu_edit">Edit</string>
 </resources>

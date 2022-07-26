@@ -1,4 +1,4 @@
- package ru.netology.nmedia
+package ru.netology.nmedia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,35 +11,46 @@ import androidx.lifecycle.ViewModel
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
 import ru.netology.nmedia.databinding.PostListItemBinding
+import ru.netology.nmedia.util.hideKeyboard
+import ru.netology.nmedia.util.showKeyboard
 import ru.netology.nmedia.viewModel.PostViewModel
 
- class MainActivity : AppCompatActivity() {
-     private val viewModel by viewModels<PostViewModel>()
-     override fun onCreate(savedInstanceState: Bundle?) {
-         super.onCreate(savedInstanceState)
-         val binding = ActivityMainBinding.inflate(layoutInflater)
-         setContentView(binding.root)
+class MainActivity : AppCompatActivity() {
+    private val viewModel by viewModels<PostViewModel>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-         val adapter = PostsAdapter(
-             onLikeClicked = {post ->
-                 viewModel.onLikeClicked(post)
-             },
-             onShareClicked = {post->
-                 viewModel.onShareClicked(post)
-             }
-         )
-         binding.postsRecyclerView.adapter=adapter
-         viewModel.data.observe(this) { posts ->
-             adapter.submitList(posts)
-             }
-         }
-         }
+        val adapter = PostsAdapter(viewModel)
+        binding.postsRecyclerView.adapter = adapter
+        viewModel.data.observe(this) { posts ->
+            adapter.submitList(posts)
+        }
+        binding.saveButton.setOnClickListener {
+            with(binding.content) {
+                val content = text.toString()
+                viewModel.onSaveButtonClicked(content)
 
 
+            }
+        }
+        viewModel.currentPost.observe(this) { currentPost ->
 
-
-
-
+            with(binding.content) {
+                val content = currentPost?.content
+                setText(content)
+                if (content != null) {
+                    requestFocus()
+                    showKeyboard()
+                } else {
+                    clearFocus()
+                    hideKeyboard()
+                }
+            }
+        }
+    }
+}
 
 
 //        private fun ActivityMainBinding.render (post: Posts){
@@ -52,30 +63,33 @@ import ru.netology.nmedia.viewModel.PostViewModel
 //            showCount.text =getCountToString(post.show)
 //        }
 
-     fun getCountToString (count: Int): String {
-         return when {
-                  count in 1000..9_999 -> {
-                      if (count % 1000 >= 100) {
-                          "%.1f K".format(count/1_000.0)
-                      } else {
-                          "${count/1_000} K "
-                      }
-                  }
-                  count in 10_000..999_999 -> {
-                      "${count/1_000} K "
-                  }
-                  count >= 1_000_000 -> {
-                      if (count % 1000_000 >=100_000) {
-                          "%.1f M".format(count / 1_000_000.0)
-                      } else{
-                          "${count/1_000_000} M "
-                      }}
-                  else -> {"$count"}
-                  }
-     }
+fun getCountToString(count: Int): String {
+    return when {
+        count in 1000..9_999 -> {
+            if (count % 1000 >= 100) {
+                "%.1f K".format(count / 1_000.0)
+            } else {
+                "${count / 1_000} K "
+            }
+        }
+        count in 10_000..999_999 -> {
+            "${count / 1_000} K "
+        }
+        count >= 1_000_000 -> {
+            if (count % 1000_000 >= 100_000) {
+                "%.1f M".format(count / 1_000_000.0)
+            } else {
+                "${count / 1_000_000} M "
+            }
+        }
+        else -> {
+            "$count"
+        }
+    }
+}
 
-     @DrawableRes
-     private fun getLikeIconResId(liked : Boolean) =
-         if (liked) R.drawable.ic_baseline_favorite_red_24 else R.drawable.ic_baseline_favorite_24
+@DrawableRes
+private fun getLikeIconResId(liked: Boolean) =
+    if (liked) R.drawable.ic_baseline_favorite_red_24 else R.drawable.ic_baseline_favorite_24
 
 
