@@ -7,57 +7,68 @@ import ru.netology.nmedia.data.PostRepository
 
 class InMemoryPostRepository : PostRepository {
     private var posts
-        get()= checkNotNull(data.value)
+        get() = checkNotNull(data.value)
         set(value) {
-            data.value=value
+            data.value = value
         }
-    override val data: MutableLiveData<List<Posts>>
-    init {
-        val initialPosts = listOf(
-            Posts(
-                id = 1,
-                author = "Анна Быкова1",
-                content = "Пост номер 1",
-                published = "28 июня"
+    private var nextId = GENERATED_POST_AMOUNT + 1
+    override val data = MutableLiveData(List(GENERATED_POST_AMOUNT) { index ->
+        Posts(
+            id = index + 1,
+            author = "Анна Быкова",
+            content = "Пост номер $index",
+            published = "28 июня"
 
-            ),
-            Posts(
-                id = 2,
-                author = "Анна Быкова2",
-                content = "После изучения SQLite самое время приступить к изучению списков – List. Но перед этим полезно будет узнать про LayoutInflater. Это знание пригодится нам в создании расширенных списков. Также перед этим уроком рекомендую снова прочесть урок про LayoutParams, освежить знания.",
-                published = "29 июня"
-
-            ),
-            Posts(
-                id = 3,
-                author = "Анна Быкова3",
-                content = "Пост номер 3",
-                published = "30 июня"
-
-            ),
         )
-        data = MutableLiveData(initialPosts)
-    }
+    })
 
-    override fun like(postId:Int) {
-        posts=posts.map{post->
-            if (post.id==postId) {
-                post.copy(isLiked = !post.isLiked,
-            likes = if (post.isLiked) post.likes -1 else post.likes +1)
-            } else{
+
+    override fun like(postId: Int) {
+        posts = posts.map { post ->
+            if (post.id == postId) {
+                post.copy(
+                    isLiked = !post.isLiked,
+                    likes = if (post.isLiked) post.likes - 1 else post.likes + 1
+                )
+            } else {
                 post
             }
         }
     }
 
-    override fun share(postId:Int) {
-        posts=posts.map{post->
-            if (post.id==postId) {
-                post.copy(share = post.share+1)
-            } else{
+    override fun share(postId: Int) {
+        posts = posts.map { post ->
+            if (post.id == postId) {
+                post.copy(share = post.share + 1)
+            } else {
                 post
             }
         }
     }
 
+    override fun delete(postId: Int) {
+        data.value = posts.filter { it.id != postId }
+    }
+
+    override fun save(post: Posts) {
+        if (post.id == PostRepository.NEW_POST_ID) insert(post) else update(post)
+    }
+
+    
+
+    private fun update(post: Posts) {
+        data.value = posts.map {
+            if (it.id == post.id) post else it
+        }
+    }
+
+    private fun insert(post: Posts) {
+        data.value = listOf(
+            post.copy(id = ++nextId)
+        ) + posts
+    }
+
+    private companion object {
+        const val GENERATED_POST_AMOUNT = 100
+    }
 }
