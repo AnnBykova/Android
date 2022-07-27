@@ -16,7 +16,6 @@ class PostViewModel : ViewModel(), PostInteractionListener {
     // val data get() = repository.data
     val currentPost = MutableLiveData<Posts?>(null)
 
-    fun onDeleteClicked(post: Posts) = repository.delete(post.id)
     fun onSaveButtonClicked(content: String) {
         if (content.isBlank()) return
         val post = currentPost.value?.copy(
@@ -31,12 +30,15 @@ class PostViewModel : ViewModel(), PostInteractionListener {
         currentPost.value = null
     }
 
+    fun onCancelButtonClicked (){
+        currentPost.value = null
+    }
+
     // region PostInteractionListener
 
     override fun onRemoveClicked(post: Posts) = repository.delete(post.id)
     override fun onEditClicked(post: Posts) {
         currentPost.value = post
-
     }
 
     override fun onLikeClicked(post: Posts) = repository.like(post.id)
