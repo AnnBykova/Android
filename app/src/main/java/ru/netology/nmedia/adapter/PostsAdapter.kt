@@ -55,6 +55,8 @@ class PostsAdapter(
             binding.share.setOnClickListener {
                 listener.onShareClicked(post)
             }
+
+            binding.menu.setOnClickListener { popupMenu.show() }
         }
 
         fun bind(post: Posts) {
@@ -63,15 +65,15 @@ class PostsAdapter(
                 textViewAuthor.text = post.author
                 textViewDate.text = post.published
                 postText.text = post.content
-                likes.setImageResource(if (post.isLiked) R.drawable.ic_baseline_favorite_red_24 else R.drawable.ic_baseline_favorite_24)
-                likesCount.text = getCountToString(post.likes)
+                likes.isChecked=post.isLiked
+                likes.setButtonDrawable(if (post.isLiked) R.drawable.ic_baseline_favorite_red_24 else R.drawable.ic_baseline_favorite_24)
+                likes.text = getCountToString(post.likes)
                 shareCount.text = getCountToString(post.share)
                 showCount.text = getCountToString(post.show)
-                menu.setOnClickListener { popupMenu.show() }
             }
         }
 
-        fun getCountToString(count: Int): String {
+        private fun getCountToString(count: Int): String {
             return when {
                 count in 1000..9_999 -> {
                     if (count % 1000 >= 100) {

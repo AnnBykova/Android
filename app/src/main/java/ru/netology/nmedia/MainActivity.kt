@@ -2,6 +2,7 @@ package ru.netology.nmedia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -31,65 +32,30 @@ class MainActivity : AppCompatActivity() {
             with(binding.content) {
                 val content = text.toString()
                 viewModel.onSaveButtonClicked(content)
-
-
             }
         }
+
+        binding.cancelButton.setOnClickListener {
+            viewModel.onCancelButtonClicked()
+        }
+
         viewModel.currentPost.observe(this) { currentPost ->
-
-            with(binding.content) {
-                val content = currentPost?.content
-                setText(content)
+            val content = currentPost?.content
+            binding.content.setText(content)
                 if (content != null) {
-                    requestFocus()
-                    showKeyboard()
+                    binding.content.requestFocus()
+                    binding.content.showKeyboard()
+                    binding.group.visibility= View.VISIBLE
+
                 } else {
-                    clearFocus()
-                    hideKeyboard()
+                    binding.content.clearFocus()
+                    binding.content.hideKeyboard()
+                    binding.group.visibility= View.GONE
                 }
-            }
         }
     }
 }
 
 
-//        private fun ActivityMainBinding.render (post: Posts){
-//            textViewAuthor.text = post.author
-//            textViewDate.text = post.published
-//            postText.text=post.content
-//            likes.setImageResource(getLikeIconResId(post.isLiked))
-//            likesCount.text= getCountToString(post.likes)
-//            shareCount.text =getCountToString(post.share)
-//            showCount.text =getCountToString(post.show)
-//        }
-
-fun getCountToString(count: Int): String {
-    return when {
-        count in 1000..9_999 -> {
-            if (count % 1000 >= 100) {
-                "%.1f K".format(count / 1_000.0)
-            } else {
-                "${count / 1_000} K "
-            }
-        }
-        count in 10_000..999_999 -> {
-            "${count / 1_000} K "
-        }
-        count >= 1_000_000 -> {
-            if (count % 1000_000 >= 100_000) {
-                "%.1f M".format(count / 1_000_000.0)
-            } else {
-                "${count / 1_000_000} M "
-            }
-        }
-        else -> {
-            "$count"
-        }
-    }
-}
-
-@DrawableRes
-private fun getLikeIconResId(liked: Boolean) =
-    if (liked) R.drawable.ic_baseline_favorite_red_24 else R.drawable.ic_baseline_favorite_24
 
 
