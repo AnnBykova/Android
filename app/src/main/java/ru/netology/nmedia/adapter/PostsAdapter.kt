@@ -66,9 +66,9 @@ class PostsAdapter(
                 textViewDate.text = post.published
                 postText.text = post.content
                 likes.isChecked=post.isLiked
-                likes.setButtonDrawable(if (post.isLiked) R.drawable.ic_baseline_favorite_red_24 else R.drawable.ic_baseline_favorite_24)
+                share.isChecked = post.isShared
                 likes.text = getCountToString(post.likes)
-                shareCount.text = getCountToString(post.share)
+                share.text = getCountToString(post.share)
                 showCount.text = getCountToString(post.show)
             }
         }

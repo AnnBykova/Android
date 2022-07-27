@@ -39,7 +39,9 @@ class InMemoryPostRepository : PostRepository {
     override fun share(postId: Int) {
         posts = posts.map { post ->
             if (post.id == postId) {
-                post.copy(share = post.share + 1)
+                post.copy(
+                    share = post.share + 1,
+                    isShared = true)
             } else {
                 post
             }
