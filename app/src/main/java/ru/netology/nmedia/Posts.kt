@@ -10,5 +10,6 @@ data class Posts (
     var show : Int = 1_000,
     var isLiked: Boolean= false,
     var isShared: Boolean= false,
-
+    val video: String? = null
         )
+

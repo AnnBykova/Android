@@ -7,4 +7,7 @@
     <string name="description_post_save">Post save</string>
     <string name="menu_edit">Edit</string>
     <string name="cancel_editing">Edit post</string>
+    <string name="chooser_share_post">Share post</string>
+    <string name="add_post">Add post</string>
+    <string name="play">Play</string>
 </resources>

@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -57,6 +58,14 @@ class PostsAdapter(
             }
 
             binding.menu.setOnClickListener { popupMenu.show() }
+
+            binding.imageviewVideo.setOnClickListener{
+                listener.onVideoClicked(post)
+            }
+
+            binding.buttonPlay.setOnClickListener{
+                listener.onVideoClicked(post)
+            }
         }
 
         fun bind(post: Posts) {
@@ -70,6 +79,7 @@ class PostsAdapter(
                 likes.text = getCountToString(post.likes)
                 share.text = getCountToString(post.share)
                 showCount.text = getCountToString(post.show)
+                group.isVisible = post.video!= null
             }
         }
 
