@@ -32,7 +32,7 @@ class PostContentActivity : AppCompatActivity() {
 
     object ResultContract : ActivityResultContract<String?, String?>(){
         override fun createIntent(context: Context, input: String?)=
-            Intent (context, PostContentActivity ::class.java)
+            Intent (context, PostContentActivity ::class.java).putExtra(Intent.EXTRA_TEXT,input)
 
 
         // разбираем результат, который получили

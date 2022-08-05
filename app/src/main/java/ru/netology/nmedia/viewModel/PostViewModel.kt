@@ -47,9 +47,6 @@ class PostViewModel : ViewModel(), PostInteractionListener {
     override fun onRemoveClicked(post: Posts) = repository.delete(post.id)
     override fun onEditClicked(post: Posts) {
         currentPost.value = post
-//        val intent = Intent().apply {
-//            putExtra( Intent.EXTRA_TEXT, post.content)
-//        }
         editPostContent.value=post.content
 
 
