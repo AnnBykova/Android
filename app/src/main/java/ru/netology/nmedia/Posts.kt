@@ -9,5 +9,6 @@ data class Posts (
     var share: Int = 1_549_999,
     var show : Int = 1_000,
     var isLiked: Boolean= false,
+    var isShared: Boolean= false,
 
         )

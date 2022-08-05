@@ -42,15 +42,17 @@
         app:layout_constraintTop_toBottomOf="@id/textViewAuthor"
         tools:text="21 июня в 10.00" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/menu"
+        style="@style/Widget.AppTheme.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_options_24dp"
+        app:icon="@drawable/ic_options_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageViewAvatar" />
+        app:layout_constraintTop_toTopOf="@id/imageViewAvatar"
+        android:layout_marginStart="8dp"
+        android:checkable="true"
+        />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/headerBarrier"
@@ -81,42 +83,30 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="postText" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/likes"
+        style="@style/Widget.AppTheme.LikeCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/footerBarrier"
         android:layout_marginStart="8dp"
-        android:button="@drawable/ic_baseline_favorite_24"
+        android:checkable="true"
         tools:text="100 K"
         />
-
-
-    <androidx.appcompat.widget.AppCompatImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/share"
+        style="@style/Widget.AppTheme.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_baseline_share_24"
+        app:icon="@drawable/ic_baseline_share_24"
         app:layout_constraintStart_toEndOf="@id/likes"
-        app:layout_constraintTop_toBottomOf="@id/footerBarrier" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/shareCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
-        android:textSize="16dp"
-        app:layout_constraintStart_toEndOf="@id/share"
         app:layout_constraintTop_toBottomOf="@id/footerBarrier"
-        tools:text="15"
-
+        android:layout_marginStart="8dp"
+        android:checkable="true"
+        tools:text="1.5 М"
         />
+
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/showCount"
