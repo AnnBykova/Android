@@ -1,5 +1,6 @@
 package ru.netology.nmedia.activity
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.launch
 import androidx.activity.viewModels
+import androidx.core.content.edit
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.ActivityMainBinding
@@ -20,7 +23,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+//        run{
+//            val preferences = getPreferences(Context.MODE_PRIVATE)
+//            preferences.edit {
+//                putString( "key", "value")
+//            }
+//        }
+//
+//
+//        run {
+//            val preferences = getPreferences(Context.MODE_PRIVATE)
+//            val value = preferences.getString("key", "no value") ?: return@run
+//            Snackbar.make (binding.root, value, Snackbar.LENGTH_INDEFINITE).show()
+//        }
         val adapter = PostsAdapter(viewModel)
         binding.postsRecyclerView.adapter = adapter
         viewModel.data.observe(this) { posts ->
@@ -62,10 +77,8 @@ class MainActivity : AppCompatActivity() {
             postContentActivityLauncher.launch(intent.getStringExtra(Intent.EXTRA_TEXT))
         }
 
-        viewModel.editPostContent.observe(this) { text->
-            val  intent  = Intent(this, PostContentActivity ::class.java);
-            intent.putExtra(Intent.EXTRA_TEXT, text);
-            postContentActivityLauncher.launch(intent.getStringExtra(Intent.EXTRA_TEXT))
+        viewModel.editPostContent.observe(this) {
+            postContentActivityLauncher.launch(it)
         }
     }
 }
