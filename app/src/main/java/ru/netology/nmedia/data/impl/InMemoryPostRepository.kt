@@ -17,8 +17,8 @@ class InMemoryPostRepository : PostRepository {
             id = index + 1,
             author = "Анна Быкова",
             content = "Пост номер $index",
-            published = "28 июня"
-
+            published = "28 июня",
+            video = "https://www.youtube.com/watch?v=i4kZSGROs6s"
         )
     })
 
