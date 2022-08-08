@@ -23,19 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        run{
-//            val preferences = getPreferences(Context.MODE_PRIVATE)
-//            preferences.edit {
-//                putString( "key", "value")
-//            }
-//        }
-//
-//
-//        run {
-//            val preferences = getPreferences(Context.MODE_PRIVATE)
-//            val value = preferences.getString("key", "no value") ?: return@run
-//            Snackbar.make (binding.root, value, Snackbar.LENGTH_INDEFINITE).show()
-//        }
+        
         val adapter = PostsAdapter(viewModel)
         binding.postsRecyclerView.adapter = adapter
         viewModel.data.observe(this) { posts ->
