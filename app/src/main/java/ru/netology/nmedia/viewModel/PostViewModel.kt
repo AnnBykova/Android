@@ -27,7 +27,9 @@ class PostViewModel (
     val sharePostContent= SingleLiveEvent<String>()
     val playVideo= SingleLiveEvent<String>()
     val editPostContent= SingleLiveEvent<String>()
-    val navigateToPostContentScreenEvent= SingleLiveEvent<Unit>()
+    val showSinglePost= SingleLiveEvent<Int>()
+    val deleteSinglePost= SingleLiveEvent<Int>()
+    val navigateToPostContentScreenEvent= SingleLiveEvent<String>()
     val currentPost = MutableLiveData<Posts?>(null)
 
     fun onSaveButtonClicked(content: String) {
@@ -44,24 +46,32 @@ class PostViewModel (
         currentPost.value = null
     }
 
-    fun onCancelButtonClicked (){
-        currentPost.value = null
-    }
+//    fun onCancelButtonClicked (){
+//        currentPost.value = null
+//    }
 
 
     // region PostInteractionListener
 
-    override fun onRemoveClicked(post: Posts) = repository.delete(post.id)
+    override fun onRemoveClicked(post: Posts) {
+        repository.delete(post.id)
+        deleteSinglePost.value = post.id
+    }
+
     override fun onEditClicked(post: Posts) {
         currentPost.value = post
         editPostContent.value=post.content
-
-
     }
 
     override fun onVideoClicked(post: Posts) {
         val url = requireNotNull(post.video)
         playVideo.value=url
+    }
+
+    override fun onPostClicked(post: Posts) {
+        currentPost.value = post
+        repository.show(post)
+        showSinglePost.value = post.id
     }
 
     override fun onLikeClicked(post: Posts) = repository.like(post.id)
@@ -71,9 +81,9 @@ class PostViewModel (
         repository.share(post.id)
     }
 
-    fun onAddClicked() {
-        navigateToPostContentScreenEvent.call()
-    }
+//    fun onAddClicked() {
+//        navigateToPostContentScreenEvent.call()
+//    }
 
 // endregion PostInteractionListener
 
