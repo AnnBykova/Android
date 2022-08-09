@@ -16,15 +16,12 @@ import ru.netology.nmedia.databinding.PostListItemBinding
 
 class PostsAdapter(
     private val interactionListener: PostInteractionListener
-//    private val onLikeClicked: (Posts) -> Unit,
-//    private val onShareClicked: (Posts) -> Unit
+
 ) : ListAdapter<Posts, PostsAdapter.ViewHolder>(DiffCallback) {
 
     class ViewHolder(
         private val binding: PostListItemBinding,
         listener: PostInteractionListener
-//        private val onLikeClicked: OnButtonListener,
-//        private val onShareClicked: OnButtonListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var post: Posts
@@ -65,6 +62,10 @@ class PostsAdapter(
 
             binding.buttonPlay.setOnClickListener{
                 listener.onVideoClicked(post)
+            }
+
+            binding.postText.setOnClickListener{
+                listener.onPostClicked(post)
             }
         }
 
