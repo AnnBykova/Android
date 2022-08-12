@@ -10,7 +10,7 @@ interface PostRepository {
     fun share(postId: Int)
     fun delete(postId: Int)
     fun save (post: Posts)
-    fun show (post: Posts)
+//    fun show (post: Posts)
 
     companion object{
         const val NEW_POST_ID = 0

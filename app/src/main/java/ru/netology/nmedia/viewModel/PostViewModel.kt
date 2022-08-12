@@ -10,7 +10,9 @@ import ru.netology.nmedia.adapter.PostInteractionListener
 import ru.netology.nmedia.data.PostRepository
 import ru.netology.nmedia.data.impl.FilePostRepository
 import ru.netology.nmedia.data.impl.InMemoryPostRepository
+import ru.netology.nmedia.data.impl.SQLiteRepository
 import ru.netology.nmedia.data.impl.SharedPrefsPostRepository
+import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.util.SingleLiveEvent
 
 class PostViewModel (
@@ -18,6 +20,11 @@ class PostViewModel (
         ): AndroidViewModel(application), PostInteractionListener {
     private val repository: PostRepository =
         FilePostRepository(application)
+//            SQLiteRepository(
+//            dao = AppDb.getInstance(
+//                context = application
+//            ).postDao
+//        )
 
     val data by repository::data
 
@@ -69,8 +76,7 @@ class PostViewModel (
     }
 
     override fun onPostClicked(post: Posts) {
-        currentPost.value = post
-        repository.show(post)
+//        repository.show(post)
         showSinglePost.value = post.id
     }
 

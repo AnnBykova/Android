@@ -74,11 +74,11 @@ class SharedPrefsPostRepository (
         posts = posts.filter { it.id != postId }
     }
 
-    override fun show(post: Posts) {
-        data.value = posts.map {
-            if (it.id == post.id) post else it
-        }
-    }
+//    override fun show(post: Posts) {
+//        data.value = posts.map {
+//            if (it.id == post.id) post else it
+//        }
+//    }
 
     override fun save(post: Posts) {
         if (post.id == PostRepository.NEW_POST_ID) insert(post) else update(post)

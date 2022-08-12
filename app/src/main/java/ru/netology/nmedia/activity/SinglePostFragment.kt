@@ -31,7 +31,11 @@ class SinglePostFragment : Fragment(){
         viewModel.currentPost.value?.let { viewHolder.bind(it) }
         val adapter = PostsAdapter(viewModel)
         viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
+            val post = posts.find { it.id == viewModel.showSinglePost.value } ?: run {
+                findNavController().navigateUp()
+                return@observe
+            }
+            viewHolder.bind(post)
         }
         viewModel.editPostContent.observe(viewLifecycleOwner) {
             findNavController().navigate(
@@ -39,9 +43,9 @@ class SinglePostFragment : Fragment(){
                 Bundle().apply { textArg=it }
             )
         }
-        viewModel.deleteSinglePost.observe(viewLifecycleOwner) {
-            findNavController().navigateUp()
-        }
+//        viewModel.deleteSinglePost.observe(viewLifecycleOwner) {
+//            findNavController().navigateUp()
+//        }
 
         viewModel.sharePostContent.observe(viewLifecycleOwner) { postContent ->
             val intent = Intent().apply {
