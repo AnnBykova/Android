@@ -56,7 +56,12 @@ class InMemoryPostRepository : PostRepository {
         if (post.id == PostRepository.NEW_POST_ID) insert(post) else update(post)
     }
 
-    
+//    override fun show(post: Posts) {
+//        data.value = posts.map {
+//            if (it.id == post.id) post else it
+//        }
+//    }
+
 
     private fun update(post: Posts) {
         data.value = posts.map {

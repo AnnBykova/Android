@@ -8,16 +8,21 @@ import androidx.lifecycle.ViewModel
 import ru.netology.nmedia.Posts
 import ru.netology.nmedia.adapter.PostInteractionListener
 import ru.netology.nmedia.data.PostRepository
-import ru.netology.nmedia.data.impl.FilePostRepository
-import ru.netology.nmedia.data.impl.InMemoryPostRepository
-import ru.netology.nmedia.data.impl.SharedPrefsPostRepository
+import ru.netology.nmedia.data.impl.*
+import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.util.SingleLiveEvent
 
 class PostViewModel (
     application: Application
         ): AndroidViewModel(application), PostInteractionListener {
     private val repository: PostRepository =
-        FilePostRepository(application)
+        PostRepositoryImpl(
+        //FilePostRepository(application)
+//            SQLiteRepository(
+            dao = AppDb.getInstance(
+                context = application
+            ).postDao
+        )
 
     val data by repository::data
 
@@ -27,7 +32,9 @@ class PostViewModel (
     val sharePostContent= SingleLiveEvent<String>()
     val playVideo= SingleLiveEvent<String>()
     val editPostContent= SingleLiveEvent<String>()
-    val navigateToPostContentScreenEvent= SingleLiveEvent<Unit>()
+    val showSinglePost= SingleLiveEvent<Int>()
+    val deleteSinglePost= SingleLiveEvent<Int>()
+    val navigateToPostContentScreenEvent= SingleLiveEvent<String>()
     val currentPost = MutableLiveData<Posts?>(null)
 
     fun onSaveButtonClicked(content: String) {
@@ -44,24 +51,31 @@ class PostViewModel (
         currentPost.value = null
     }
 
-    fun onCancelButtonClicked (){
-        currentPost.value = null
-    }
+//    fun onCancelButtonClicked (){
+//        currentPost.value = null
+//    }
 
 
     // region PostInteractionListener
 
-    override fun onRemoveClicked(post: Posts) = repository.delete(post.id)
+    override fun onRemoveClicked(post: Posts) {
+        repository.delete(post.id)
+        deleteSinglePost.value = post.id
+    }
+
     override fun onEditClicked(post: Posts) {
         currentPost.value = post
         editPostContent.value=post.content
-
-
     }
 
     override fun onVideoClicked(post: Posts) {
         val url = requireNotNull(post.video)
         playVideo.value=url
+    }
+
+    override fun onPostClicked(post: Posts) {
+//        repository.show(post)
+        showSinglePost.value = post.id
     }
 
     override fun onLikeClicked(post: Posts) = repository.like(post.id)
@@ -71,9 +85,9 @@ class PostViewModel (
         repository.share(post.id)
     }
 
-    fun onAddClicked() {
-        navigateToPostContentScreenEvent.call()
-    }
+//    fun onAddClicked() {
+//        navigateToPostContentScreenEvent.call()
+//    }
 
 // endregion PostInteractionListener
 
